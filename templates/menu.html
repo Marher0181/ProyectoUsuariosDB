@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/menu.css') }}">
+</head>
+<body>
+    <div class="container">
+        <form class="form" method="POST" action="/procesar_datos" onsubmit="prepareForm()">
+            <p class="title">Menú Principal</p>
+
+            <span class="input-span">
+                <label for="username" class="label">Nombre del Usuario</label>
+                <input type="text" id="username" class="input" name="username" required>
+            </span>
+
+            <span class="input-span">
+                <label for="rol" class="label">Rol Asignado</label>
+                <select id="rol" class="input" name="rol" required onchange="togglePermisos()">
+                    <option value="">Selecciona un Rol</option>
+                    <option value="add">Nuevo rol</option>
+                    <option value="admin">Administrador</option>
+                    <option value="user">Usuario</option>
+                    <option value="guest">Invitado</option>
+                </select>
+            </span>
+
+            <span id="permisos-container" class="input-span" style="display:none;">
+                <label for="permisos" class="label">Permisos</label>
+                <div>
+                    <input type="checkbox" id="agregar" name="permisos_agregar">
+                    <label for="agregar">Agregar</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="eliminar" name="permisos_eliminar">
+                    <label for="eliminar">Eliminar</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="visualizar" name="permisos_visualizar">
+                    <label for="visualizar">Visualizar</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="editar" name="permisos_editar">
+                    <label for="editar">Editar</label>
+                </div>
+            </span>
+
+            <input class="submit" type="submit" value="Enviar" />
+        </form>
+    </div>
+
+    <script>
+        function togglePermisos() {
+            const rolSelect = document.getElementById('rol');
+            const permisosContainer = document.getElementById('permisos-container');
+
+            if (rolSelect.value === 'add') {
+                permisosContainer.style.display = 'block';
+            } else {
+                permisosContainer.style.display = 'none';
+            }
+        }
+
+        function prepareForm() {
+            setPermissionValue('agregar');
+            setPermissionValue('eliminar');
+            setPermissionValue('visualizar');
+            setPermissionValue('editar');
+        }
+
+        function setPermissionValue(permissionId) {
+            const checkbox = document.getElementById(permissionId);
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = checkbox.name;
+            hiddenInput.value = checkbox.checked ? '1' : '0';
+            document.forms[0].appendChild(hiddenInput);
+        }
+    </script>
+</body>
+</html>

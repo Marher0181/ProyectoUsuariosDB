@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Roles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/menu.css') }}">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Lista de Roles</h1>
+
+    <!-- Tabla para listar roles -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rol in roles %}
+            <tr>
+                <td>{{ rol.idRol }}</td>
+                <td>{{ rol.nombre }}</td>
+                <td>{{ rol.descripcion }}</td>
+                <td>
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#editarModal" 
+                            data-id="{{ rol.idRol }}" data-nombre="{{ rol.nombre }}" 
+                            data-descripcion="{{ rol.descripcion }}">Editar</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#otorgarPermisosModal"
+                            data-id="{{ rol.idRol }}">Otorgar Permisos</button>
+                    <form action="{{ url_for('eliminar_rol', id=rol.idRol) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Modal para editar rol -->
+    <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Rol</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditar" method="POST">
+                        <input type="hidden" name="id" id="rolId">
+                        <div class="form-group">
+                            <label for="nombreEditar">Nombre:</label>
+                            <input type="text" name="nombre" id="nombreEditar" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcionEditar">Descripción:</label>
+                            <input type="text" name="descripcion" id="descripcionEditar" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar Rol</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="otorgarPermisosModal" tabindex="-1" role="dialog" aria-labelledby="otorgarPermisosModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="otorgarPermisosModalLabel">Otorgar Permisos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formOtorgarPermisos" method="POST" action="{{ url_for('otorgar_permisos') }}">
+                        <input type="hidden" name="rol_id" id="rolIdPermisos">
+                        <div class="form-group">
+                            <label for="tabla">Tabla:</label>
+                            <input type="text" name="tabla" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Permisos:</label><br>
+                            <div class="form-check">
+                                <input type="checkbox" name="permisos" value="Insertar" class="form-check-input" id="permisosInsertar">
+                                <label class="form-check-label" for="permisosInsertar">Insertar</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="permisos" value="Eliminar" class="form-check-input" id="permisosEliminar">
+                                <label class="form-check-label" for="permisosEliminar">Eliminar</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="permisos" value="Seleccionar" class="form-check-input" id="permisosSeleccionar">
+                                <label class="form-check-label" for="permisosSeleccionar">Seleccionar</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="permisos" value="Actualizar" class="form-check-input" id="permisosActualizar">
+                                <label class="form-check-label" for="permisosActualizar">Actualizar</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Otorgar Permisos</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $('#editarModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id'); 
+        var nombre = button.data('nombre');
+        var descripcion = button.data('descripcion');
+
+        var modal = $(this);
+        modal.find('#rolId').val(id);
+        modal.find('#nombreEditar').val(nombre);
+        modal.find('#descripcionEditar').val(descripcion);
+    });
+
+    $('#otorgarPermisosModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id'); 
+
+    var modal = $(this);
+    modal.find('#rolIdPermisos').val(id);
+});
+
+</script>
+
+</body>
+</html>

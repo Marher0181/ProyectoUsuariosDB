@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #343a40;
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            color: #343a40;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Bienvenido al Dashboard de Administrador</h1>
+</div>
+
+<div class="container">
+    <h2>Opciones disponibles:</h2>
+    <a href="/createProducto" class="btn">Crear Producto</a>
+    <a href="/updateProducto" class="btn">Actualizar Producto</a>
+    <a href="/deleteProducto" class="btn">Eliminar Producto</a>
+    <a href="/roles" class="btn">Roles </a>
+    <a href="/usuarios" class="btn">Usuarios </a>
+</div>
+
+</body>
+</html>

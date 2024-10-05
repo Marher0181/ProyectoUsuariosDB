@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Usuario</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/registrarse.css') }}">
+</head>
+<body>
+    <div class="container">
+        <form class="form">
+            <p class="title">Registrarse</p>
+
+            <div class="flex">
+                <span class="input-span">
+                    <label for="nombre" class="label">Nombre</label>
+                    <input type="text" id="nombre" class="input" required>
+                </span>
+
+                <span class="input-span">
+                    <label for="apellidos" class="label">Apellidos</label>
+                    <input type="text" id="apellidos" class="input" required>
+                </span>
+            </div>
+
+            <span class="input-span">
+                <label for="password" class="label">Contraseña</label>
+                <input type="password" id="password" class="input" required>
+            </span>
+
+            <span class="input-span">
+                <label for="confirm-password" class="label">Confirmar contraseña</label>
+                <input type="password" id="confirm-password" class="input" required>
+            </span>
+
+            <input class="submit" type="submit" value="Registrarse" />
+            <span class="signin">¿Ya tienes una cuenta? <a href="/">Iniciar Sesión</a></span>
+        </form>
+    </div>
+</body>
+</html>

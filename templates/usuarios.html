@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Usuarios</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/menu.css') }}">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Lista de Usuarios</h1>
+
+    <!-- Formulario para agregar un nuevo usuario -->
+    <form method="POST" action="{{ url_for('usuarios') }}" class="mb-4">
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" name="apellido" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+    </form>
+
+    <!-- Tabla para listar usuarios -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.idUsuario }}</td>
+                <td>{{ usuario.nombre }}</td>
+                <td>{{ usuario.apellido }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#editarModal" 
+                            data-id="{{ usuario.id }}" data-nombre="{{ usuario.nombre }}" 
+                            data-apellido="{{ usuario.apellido }}" data-email="{{ usuario.email }}">Editar</button>
+                    <form action="{{ url_for('eliminar_usuario', id=usuario.idUsuario) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form>
+                    <a href="{{ url_for('asociar_rol', id=usuario.idUsuario) }}" class="btn btn-info">Asociar Rol</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal para editar usuario -->
+<div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel">Editar Usuario</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditar" method="POST">
+                    <input type="hidden" name="idUsuario" id="usuarioId">
+                    <div class="form-group">
+                        <label for="nombreEditar">Nombre:</label>
+                        <input type="text" name="nombre" id="nombreEditar" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidoEditar">Apellido:</label>
+                        <input type="text" name="apellido" id="apellidoEditar" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailEditar">Email:</label>
+                        <input type="email" name="email" id="emailEditar" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    $('#editarModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Botón que activa el modal
+        var id = button.data('id'); // Extraer información de los atributos data-*
+        var nombre = button.data('nombre');
+        var apellido = button.data('apellido');
+        var email = button.data('email');
+
+        // Actualizar el modal's contenido
+        var modal = $(this);
+        modal.find('#usuarioId').val(id);
+        modal.find('#nombreEditar').val(nombre);
+        modal.find('#apellidoEditar').val(apellido);
+        modal.find('#emailEditar').val(email);
+        modal.find('#formEditar').attr('action', '/usuarios/' + id);
+    });
+</script>
+
+</body>
+</html>
